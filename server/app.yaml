@@ -1,1 +1,17 @@
 runtime: go113
+
+handlers: 
+  # npm run build によって生成された index.html を先ず参照するように指定
+  - url: /
+    static_files: dist/index.html
+    upload: dist/index.html
+
+  # /api を持つ URL はサーバーへのリクエストとして認識。これが無い、あるいは /.* より下にあると、vue 上の router 解決に上書きされる
+  - url: /api/.*
+    redirect_http_response_code: 301
+    script: auto
+
+  # npm run build によって生成された index.html 以外のファイルのアップロード
+  - url: /(.*)
+    static_files: dist/\1
+    upload: dist/(.*)
