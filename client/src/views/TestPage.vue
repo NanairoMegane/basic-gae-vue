@@ -1,18 +1,26 @@
 <template>
+  <b-card>
     <div>
-    <div class="test">
-        This is Test Page.
-    </div>
-    <div>
-        Message from Server: {{mes}}
-    </div>
-    <div>
-        <button v-on:click="doRequest">Re:Get</button>
-    </div>
-    <div class="tobase">
-        <router-link to="/">Go to Base Page</router-link>
-    </div>
+      <div class="test">
+          Server Response Test.
+      </div>
+      <b-button v-on:click="doRequest" variant="outline-primary">Call Server</b-button>
+      <b-button v-on:click="doReset" variant="outline-warning">Reset</b-button>
+      <b-table-simple>
+        <b-body>
+          <b-tr v-for="(data, i) in resDataList" :key=i>
+            <b-td> {{i}}</b-td>
+            <b-td> {{data}} </b-td>            
+          </b-tr>
+        </b-body>
+        <b-td>
+        </b-td>
+      </b-table-simple>
+      <div class="tobase">
+          <router-link to="/">Close Test Page</router-link>
+      </div>
     </div>  
+  </b-card>
 </template>
 
 <script>
@@ -21,7 +29,7 @@ export default {
   name: 'TestPage',
   data(){
       return {
-        mes: "None"
+        resDataList: []
       }
   },
   methods:{
@@ -29,15 +37,15 @@ export default {
       testService.doGet()
       .then(res => {
           if (res.status === 200) {
-              this.mes = res.data;
+              this.resDataList.push(res.data);
           } else {
-              this.mes = "Failed.";
+              this.resDataList.push("Failed");
           }
       });
+    },
+    doReset(){
+      this.resDataList = [];
     }
   },
-  mounted(){
-    this.doRequest();
-  }
 }
 </script>
